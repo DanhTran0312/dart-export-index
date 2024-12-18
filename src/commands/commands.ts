@@ -104,7 +104,7 @@ async function exportDartFilesFromDirectory(directory: string, config: vscode.Wo
       await exportDartFilesFromDirectory(subdirectory, config); // Recurse into subdirectory
 
       // export dir_name/dir_name.dart or any other file name
-      // can be taken from 2 last parts of exportFilePath 
+      // can be taken from 2 last parts of exportFilePath
       const subExportFileName = subExportFilePath.split('/').slice(-2).join('/');
       const exportationLine = `export '${subExportFileName}';`;
       writeLineAndSort(exportFilePath, exportationLine);
@@ -125,17 +125,29 @@ const getFilePath = (): string | null => {
 };
 
 const getExportFilePathFromDirectory = (directory: string, exportFileName: string | undefined): string => {
-  let shouldUseDirectoryName = exportFileName === undefined
-    || exportFileName === ''
-    || exportFileName === null
-    || exportFileName === 'dir_name.dart';
-
-  if (shouldUseDirectoryName) {
+  // If exportFileName is not provided or empty, use default 'dir_name.dart'
+  if (exportFileName === undefined || exportFileName === '' || exportFileName === null) {
     const directoryName = getDirectoryNameFromDirectory(directory);
     return path.join(directory, `${directoryName}.dart`);
   }
 
-  return path.join(directory, `${exportFileName}`);
+  // If exportFileName is exactly 'dir_name.dart', use directory name
+  if (exportFileName === 'dir_name.dart') {
+    const directoryName = getDirectoryNameFromDirectory(directory);
+    return path.join(directory, `${directoryName}.dart`);
+  }
+
+  // Handle custom pattern: replace 'dir_name' with actual directory name
+  if (exportFileName.includes('dir_name')) {
+    const directoryName = getDirectoryNameFromDirectory(directory);
+    const customFileName = exportFileName.replace('dir_name', directoryName);
+    return path.join(directory, customFileName);
+  }
+
+  // If exportFileName doesn't contain 'dir_name', prepend directory name
+  const directoryName = getDirectoryNameFromDirectory(directory);
+  const fileNameWithoutExtension = exportFileName.replace('.dart', '');
+  return path.join(directory, `${directoryName}.${fileNameWithoutExtension}.dart`);
 };
 
 const getExportationLine = (filePath: string): string => {

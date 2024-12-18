@@ -1,94 +1,90 @@
 {
-	"name": "dart-export-index",
-	"displayName": "Dart Barrel Export File Generator",
-	"description": "Create barrel file that exports the files in current directory. This allows for importing whole folders in batch instead of importing each file one by one. Creates index.dart and dir_name.dart.",
-	"icon": "screenshots/icon.png",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/orestesgaolin/dart-export-index"
-	},
-	"version": "0.4.1",
-	"publisher": "orestesgaolin",
-	"engines": {
-		"vscode": "^1.88.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"main": "./dist/extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "extension.addCurrentFileToIndexDart",
-				"title": "Export (add) current Dart file to index.dart (deprecated)"
-			},
-			{
-				"command": "extension.addCurrentFileToIndexDartDirName",
-				"title": "Export (add) current Dart file to export file"
-			},
-			{
-				"command": "extension.exportDartFilesInCurrentDirectory",
-				"title": "Export Dart files in current directory to index.dart (deprecated)"
-			},
-			{
-				"command": "extension.exportDartFilesInCurrentDirectoryDirName",
-				"title": "Export Dart files in current directory export file"
-			}
-		],
-		"configuration": {
-			"title": "Dart Barrel Export File Generator",
-			"properties": {
-				"dartBarrelExportFileGenerator.exportFileName": {
-					"type": "string",
-					"default": "dir_name.dart",
-					"markdownDescription": "Name of the file to which exports are written.\n\nLeave empty or `dir_name.dart` to export to default location. Use any other name to export to desired file. Keep the file extension e.g. `.dart` or `.e.dart`. File is overwritten on each command run."
-				},
-				"dartBarrelExportFileGenerator.recursiveExport": {
-					"type": "boolean",
-					"default": false,
-					"markdownDescription": "Enable recursive export of files from subdirectories.\n\nIt will result with a top-most export file that will include files from subdirectories. They will be referenced using their corresponding export files, e.g. `feature.dart` will export `subdirectory/subdirectory.dart` and not individual files from the `subdirectory`."
-				},
-				"dartBarrelExportFileGenerator.ignorePatterns": {
-					"type": "array",
-					"items": {
-						"type": "string"
-					},
-					"default": [
-						"*.g.dart",
-						"*.part.dart",
-						"*.freezed.dart"
-					],
-					"markdownDescription": "Glob patterns for files and directories to ignore during export.\n\nPatterns are matched against relative paths from the current working directory. Paths are not matched against file in subdirectories so `/**/` may not work."
-				}
-			}
-		}
-	},
-	"scripts": {
-		"vscode:prepublish": "npm run package",
-		"compile": "webpack",
-		"watch": "webpack --watch",
-		"package": "webpack --mode production --devtool hidden-source-map",
-		"compile-tests": "tsc -p . --outDir out",
-		"watch-tests": "tsc -p . -w --outDir out",
-		"pretest": "npm run compile-tests && npm run compile && npm run lint",
-		"lint": "eslint src --ext ts",
-		"test": "vscode-test"
-	},
-	"devDependencies": {
-		"@types/mocha": "^10.0.6",
-		"@types/node": "18.x",
-		"@types/vscode": "^1.88.0",
-		"@typescript-eslint/eslint-plugin": "^7.4.0",
-		"@typescript-eslint/parser": "^7.4.0",
-		"@vscode/test-cli": "^0.0.8",
-		"@vscode/test-electron": "^2.3.9",
-		"eslint": "^8.57.0",
-		"ts-loader": "^9.5.1",
-		"typescript": "^5.3.3",
-		"webpack": "^5.91.0",
-		"webpack-cli": "^5.1.4"
-	},
-	"dependencies": {
-		"glob": "^10.3.12"
-	}
+  "name": "dart-export-index",
+  "displayName": "Dart Barrel Export File Generator",
+  "description": "Create barrel file that exports the files in current directory. This allows for importing whole folders in batch instead of importing each file one by one. Creates index.dart and dir_name.dart.",
+  "icon": "screenshots/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/orestesgaolin/dart-export-index"
+  },
+  "version": "0.4.1",
+  "publisher": "orestesgaolin",
+  "engines": {
+    "vscode": "^1.88.0"
+  },
+  "activationEvents": [
+    "onCommand:extension.addCurrentFileToIndexDart",
+    "onCommand:extension.exportDartFilesInCurrentDirectory"
+  ],
+  "categories": [
+    "Other"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.addCurrentFileToIndexDartDirName",
+        "title": "Export (add) current Dart file to export file"
+      },
+      {
+        "command": "extension.exportDartFilesInCurrentDirectoryDirName",
+        "title": "Export Dart files in current directory export file"
+      }
+    ],
+    "configuration": {
+      "title": "Dart Barrel Export File Generator",
+      "properties": {
+        "dartBarrelExportFileGenerator.exportFileName": {
+          "type": "string",
+          "default": "dir_name.dart",
+          "markdownDescription": "Name of the file to which exports are written.\n\nLeave empty or `dir_name.dart` to export to default location. Use any other name to export to desired file. Keep the file extension e.g. `.dart` or `.e.dart`. File is overwritten on each command run."
+        },
+        "dartBarrelExportFileGenerator.recursiveExport": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Enable recursive export of files from subdirectories.\n\nIt will result with a top-most export file that will include files from subdirectories. They will be referenced using their corresponding export files, e.g. `feature.dart` will export `subdirectory/subdirectory.dart` and not individual files from the `subdirectory`."
+        },
+        "dartBarrelExportFileGenerator.ignorePatterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "*.g.dart",
+            "*.part.dart",
+            "*.freezed.dart"
+          ],
+          "markdownDescription": "Glob patterns for files and directories to ignore during export.\n\nPatterns are matched against relative paths from the current working directory. Paths are not matched against file in subdirectories so `/**/` may not work."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.6",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.88.0",
+    "@typescript-eslint/eslint-plugin": "^7.4.0",
+    "@typescript-eslint/parser": "^7.4.0",
+    "@vscode/test-cli": "^0.0.8",
+    "@vscode/test-electron": "^2.3.9",
+    "eslint": "^8.57.0",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.3.3",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "glob": "^10.3.12"
+  }
 }
